@@ -12,6 +12,7 @@
 
   <modules>
     <module>app</module>
+    <module>model</module>
   </modules>
 
   <properties>
@@ -83,11 +84,12 @@
         <version>0.8.6</version>
         <executions>
           <execution>
+            <id>agent</id>
+            <phase>test-compile</phase>
             <goals>
               <goal>prepare-agent</goal>
             </goals>
           </execution>
-          <!-- attached to Maven test phase -->
           <execution>
             <id>report</id>
             <phase>test</phase>

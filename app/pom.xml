@@ -29,7 +29,7 @@
   </dependencies>
 
   <build>
-    <finalName>web-app</finalName>
+    <finalName>persistence-demo</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

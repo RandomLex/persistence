@@ -13,13 +13,18 @@ import java.util.List;
 @AllArgsConstructor
 public class Employee extends AbstractEntity {
     private String name;
-    private List<Department> department = new ArrayList<>();
+    private List<Department> departments = new ArrayList<>();
     private int salary;
     private Title title;
 
     @Override
     public Employee withId(Integer id) {
         super.setId(id);
+        return this;
+    }
+
+    public Employee withDepartment(Department department) {
+        departments.add(department);
         return this;
     }
 }

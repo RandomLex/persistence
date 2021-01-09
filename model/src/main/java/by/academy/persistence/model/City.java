@@ -19,4 +19,9 @@ public class City extends AbstractEntity {
         super.setId(id);
         return this;
     }
+
+    public City withDepartment(Department department) {
+        departments.add(department);
+        return this;
+    }
 }

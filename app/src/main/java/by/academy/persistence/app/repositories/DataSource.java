@@ -10,11 +10,10 @@ import java.util.Properties;
 
 @Slf4j
 public class DataSource {
-    private static volatile DataSource instance;
-
     private final String url;
     private final String user;
     private final String password;
+    private final String driverName;
 
     @SneakyThrows
     private DataSource() {
@@ -23,23 +22,21 @@ public class DataSource {
         url = dbProperties.getProperty("url");
         user = dbProperties.getProperty("user");
         password = dbProperties.getProperty("password");
+        driverName = dbProperties.getProperty("driver");
+    }
+
+    private static class DataSourceHolder {
+        private static final DataSource HOLDER_INSTANCE = new DataSource();
     }
 
 
     public static DataSource getInstance() {
-        if (instance == null) {
-            synchronized (DataSource.class) {
-                if (instance == null) {
-                    instance = new DataSource();
-                }
-            }
-        }
-        return instance;
+        return DataSourceHolder.HOLDER_INSTANCE;
     }
 
     @SneakyThrows
     public Connection getConnection() throws SQLException {
-        Class.forName("org.postgresql.Driver");
+        Class.forName(driverName);
         return DriverManager.getConnection(url, user, password);
     }
 

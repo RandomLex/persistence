@@ -1,19 +1,22 @@
 package by.academy.persistence.model;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@With
-@AllArgsConstructor
 public class Title extends AbstractEntity {
     private String name;
 
-
-    @Override
     public Title withId(Integer id) {
-        super.setId(id);
+        setId(id);
+        return this;
+    }
+
+    public Title withName(String name) {
+        setName(name);
         return this;
     }
 }

@@ -11,7 +11,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 public class EmployeeRepositoryPostgres implements EmployeeRepository {
@@ -20,17 +25,26 @@ public class EmployeeRepositoryPostgres implements EmployeeRepository {
             "c.id c_id, c.name c_name, " +
             "t.id t_id, t.name t_name " +
             "from employee e " +
-            "join title t " +
+            "left join title t " +
             "on t.id = e.title_id " +
-            "join department_employee de " +
+            "left join department_employee de " +
             "on e.id = de.employee_id " +
-            "join department d " +
+            "left join department d " +
             "on d.id = de.department_id " +
-            "join city c " +
+            "left join city c " +
             "on d.city_id = c.id";
     //language=SQL
     private static final String ONE_EMPLOYEE_FILTER = " WHERE e.id = ?";
     private static final String FIND_EMPLOYEE_BY_ID = SQL_EMPLOYEE_ALL_FIELDS + ONE_EMPLOYEE_FILTER;
+    private static final String T_ID = "t_id";
+    private static final String C_ID = "c_id";
+    private static final String D_ID = "d_id";
+    private static final String E_ID = "e_id";
+    private static final String E_NAME = "e_name";
+    private static final String SALARY = "salary";
+    private static final String T_NAME = "t_name";
+    private static final String D_NAME = "d_name";
+    private static final String C_NAME = "c_name";
     private final DataSource dataSource = DataSource.getInstance();
     private static volatile EmployeeRepositoryPostgres instance;
 
@@ -58,49 +72,48 @@ public class EmployeeRepositoryPostgres implements EmployeeRepository {
              PreparedStatement ps = con.prepareStatement(SQL_EMPLOYEE_ALL_FIELDS);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                int tId = rs.getInt("t_id");
-                int cId = rs.getInt("c_id");
-                int dId = rs.getInt("d_id");
-                int eId = rs.getInt("e_id");
-
-                titleMap.putIfAbsent(tId, new Title()
-                        .withId(tId)
-                        .withName(rs.getString("t_name")));
-
-                cityMap.putIfAbsent(cId, new City()
-                        .withId(cId)
-                        .withName(rs.getString("c_name")));
-
-                departmentMap.putIfAbsent(dId, new Department()
-                        .withId(dId)
-                        .withName(getRsString(rs, "d_name")));
+                Integer tId = getInteger(rs, T_ID);
+                Integer cId = getInteger(rs, C_ID);
+                Integer dId = getInteger(rs, D_ID);
+                Integer eId = getInteger(rs, E_ID);
 
                 employeeMap.putIfAbsent(eId,
                         new Employee()
                                 .withId(eId)
-                                .withName(rs.getString("e_name"))
-                                .withSalary(rs.getInt("salary"))
-                                .withTitle(titleMap.getOrDefault(tId,
+                                .withName(rs.getString(E_NAME))
+                                .withSalary(rs.getInt(SALARY))
+                                .withTitle(putIfAbsentAndReturn(titleMap, tId,
                                         new Title()
                                                 .withId(tId)
-                                                .withName(rs.getString("t_name"))))
-                                .withDepartment(departmentMap.get(dId)));
-
-                cityMap.computeIfPresent(cId, (id, city) ->
-                        city.withDepartment(departmentMap.get(dId)));
-                departmentMap.computeIfPresent(dId, (id, department) ->
-                        department
-                                .withCity(cityMap.get(cId))
-                                .withEmployee(employeeMap.get(eId)));
+                                                .withName(rs.getString(T_NAME))))
+                                .withDepartment(putIfAbsentAndReturn(departmentMap, dId,
+                                        new Department()
+                                                .withId(dId)
+                                                .withName(getRsString(rs, D_NAME))
+                                                .withCity(putIfAbsentAndReturn(cityMap, cId,
+                                                        new City()
+                                                                .withId(cId)
+                                                                .withName(getRsString(rs, C_NAME)))))));
                 employeeMap.computeIfPresent(eId, (id, employee) ->
                         employee.withDepartment(departmentMap.get(dId)));
             }
-
         } catch (SQLException e) {
             log.error("error while reading from employee");
             throw new DatabaseException(e);
         }
         return new ArrayList<>(employeeMap.values());
+    }
+
+    private static Integer getInteger(ResultSet rs, String tId) throws SQLException {
+        return rs.getObject(tId, Integer.class);
+    }
+
+    private static <K, V> V putIfAbsentAndReturn(Map<K, V> map, K key, V value) {
+        if (key == null) {
+            return null;
+        }
+        map.putIfAbsent(key, value);
+        return map.get(key);
     }
 
     private String getRsString(ResultSet rs, String columnName) {

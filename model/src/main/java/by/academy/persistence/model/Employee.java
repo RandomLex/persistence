@@ -6,8 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -16,7 +16,7 @@ import java.util.List;
 public class Employee extends AbstractEntity {
     private String name;
     @JsonManagedReference
-    private List<Department> departments = new ArrayList<>();
+    private Set<Department> departments = new LinkedHashSet<>();
     private int salary;
     private Title title;
 
@@ -31,6 +31,9 @@ public class Employee extends AbstractEntity {
     }
 
     public Employee withDepartment(Department department) {
+        if (department == null) {
+            return this;
+        }
         departments.add(department);
         return this;
     }

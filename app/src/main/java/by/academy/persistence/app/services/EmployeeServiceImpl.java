@@ -7,6 +7,7 @@ import by.academy.persistence.model.Employee;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public class EmployeeServiceImpl implements EmployeeService {
@@ -32,6 +33,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> getAllEmployees() {
         return repository.findAll();
+    }
+
+    @Override
+    public Optional<Employee> getEmployee(Integer id) {
+        return repository.find(id);
     }
 
     @Override

@@ -45,7 +45,11 @@ public class EmployeeRepositoryPostgres implements EmployeeRepository {
     private static final String T_NAME = "t_name";
     private static final String D_NAME = "d_name";
     private static final String C_NAME = "c_name";
+    private static final String ID = "id";
+    private static final String NAME = "name";
+
     private final DataSource dataSource = DataSource.getInstance();
+
     private static volatile EmployeeRepositoryPostgres instance;
 
     private EmployeeRepositoryPostgres() {
@@ -64,42 +68,74 @@ public class EmployeeRepositoryPostgres implements EmployeeRepository {
 
     @Override
     public List<Employee> findAll() {
+        List<Employee> result = new ArrayList<>();
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement ps = con.prepareStatement(SQL_EMPLOYEE_ALL_FIELDS);
+             ResultSet rs = ps.executeQuery()) {
+            result = rsToEmployees(rs);
+        } catch (SQLException e) {
+            log.error("error while reading from employee");
+            throw new DatabaseException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public Optional<Employee> find(Integer id) {
+        List<Employee> result;
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement ps = con.prepareStatement(FIND_EMPLOYEE_BY_ID)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            result = rsToEmployees(rs);
+        } catch (SQLException e) {
+            log.error("error while reading from employee");
+            throw new DatabaseException(e);
+        }
+        return result.stream().findAny();
+    }
+
+    @Override
+    public Employee save(Employee entity) {
+        return null;
+    }
+
+    @Override
+    public Optional<Employee> remove(Employee entity) {
+        return Optional.empty();
+    }
+
+    private List<Employee> rsToEmployees(ResultSet rs) throws SQLException {
         Map<Integer, Employee> employeeMap = new LinkedHashMap<>();
         Map<Integer, Department> departmentMap = new HashMap<>();
         Map<Integer, City> cityMap = new HashMap<>();
         Map<Integer, Title> titleMap = new HashMap<>();
-        try (Connection con = dataSource.getConnection();
-             PreparedStatement ps = con.prepareStatement(SQL_EMPLOYEE_ALL_FIELDS);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                Integer tId = getInteger(rs, T_ID);
-                Integer cId = getInteger(rs, C_ID);
-                Integer dId = getInteger(rs, D_ID);
-                Integer eId = getInteger(rs, E_ID);
 
-                employeeMap.putIfAbsent(eId,
-                        new Employee()
-                                .withId(eId)
-                                .withName(rs.getString(E_NAME))
-                                .withSalary(rs.getInt(SALARY))
-                                .withTitle(putIfAbsentAndReturn(titleMap, tId,
-                                        new Title()
-                                                .withId(tId)
-                                                .withName(rs.getString(T_NAME))))
-                                .withDepartment(putIfAbsentAndReturn(departmentMap, dId,
-                                        new Department()
-                                                .withId(dId)
-                                                .withName(getRsString(rs, D_NAME))
-                                                .withCity(putIfAbsentAndReturn(cityMap, cId,
-                                                        new City()
-                                                                .withId(cId)
-                                                                .withName(getRsString(rs, C_NAME)))))));
-                employeeMap.computeIfPresent(eId, (id, employee) ->
-                        employee.withDepartment(departmentMap.get(dId)));
-            }
-        } catch (SQLException e) {
-            log.error("error while reading from employee");
-            throw new DatabaseException(e);
+        while (rs.next()) {
+            Integer tId = getInteger(rs, T_ID);
+            Integer cId = getInteger(rs, C_ID);
+            Integer dId = getInteger(rs, D_ID);
+            Integer eId = getInteger(rs, E_ID);
+
+            employeeMap.putIfAbsent(eId,
+                    new Employee()
+                            .withId(eId)
+                            .withName(rs.getString(E_NAME))
+                            .withSalary(rs.getInt(SALARY))
+                            .withTitle(putIfAbsentAndReturn(titleMap, tId,
+                                    new Title()
+                                            .withId(tId)
+                                            .withName(rs.getString(T_NAME))))
+                            .withDepartment(putIfAbsentAndReturn(departmentMap, dId,
+                                    new Department()
+                                            .withId(dId)
+                                            .withName(getRsString(rs, D_NAME))
+                                            .withCity(putIfAbsentAndReturn(cityMap, cId,
+                                                    new City()
+                                                            .withId(cId)
+                                                            .withName(getRsString(rs, C_NAME)))))));
+            employeeMap.computeIfPresent(eId, (id, employee) ->
+                    employee.withDepartment(departmentMap.get(dId)));
         }
         return new ArrayList<>(employeeMap.values());
     }
@@ -130,34 +166,5 @@ public class EmployeeRepositoryPostgres implements EmployeeRepository {
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
-    }
-
-
-    @Override
-    public Optional<Employee> find(Integer id) {
-        Employee result = null;
-        try (Connection con = dataSource.getConnection();
-             PreparedStatement ps = con.prepareStatement(FIND_EMPLOYEE_BY_ID);
-             ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                new Employee()
-                        .withId(rs.getInt("id"))
-                        .withName(rs.getString("name"))
-                        .withSalary(rs.getInt("salary"));
-            }
-        } catch (SQLException sqlException) {
-            log.error("error while reading from employee");
-        }
-        return Optional.ofNullable(result);
-    }
-
-    @Override
-    public Employee save(Employee entity) {
-        return null;
-    }
-
-    @Override
-    public Optional<Employee> remove(Employee entity) {
-        return Optional.empty();
     }
 }

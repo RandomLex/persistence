@@ -1,13 +1,11 @@
 package by.academy.persistence.app.repositories;
 
-import by.academy.persistence.app.exceptions.DatabaseException;
 import by.academy.persistence.model.City;
 import by.academy.persistence.model.Department;
 import by.academy.persistence.model.Employee;
 import by.academy.persistence.model.Title;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,10 +14,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
-public class EmployeeRepositoryPostgres implements EmployeeRepository {
+public class EmployeeRepositoryPostgres extends AbstractRepositoryPostgres<Employee> implements EmployeeRepository {
     private static final String SQL_EMPLOYEE_ALL_FIELDS = "select e.id e_id, e.name e_name, salary, " +
             "d.id d_id, d.name d_name, " +
             "c.id c_id, c.name c_name, " +
@@ -45,8 +42,9 @@ public class EmployeeRepositoryPostgres implements EmployeeRepository {
     private static final String T_NAME = "t_name";
     private static final String D_NAME = "d_name";
     private static final String C_NAME = "c_name";
-    private static final String ID = "id";
-    private static final String NAME = "name";
+    private static final String UPDATE_EMPLOYEE_SET_NAME_SALARY_WHERE_ID = "UPDATE employee set name=?, salary=? WHERE id=?";
+    protected static final String INSERT_INTO_EMPLOYEE_NAME_SALARY_VALUES_RETURNING_ID = "INSERT INTO employee (name, salary) VALUES (?, ?) RETURNING id";
+    private static final String DELETE_FROM_EMPLOYEE_WHERE_ID = "DELETE FROM employee WHERE id=?";
 
     private final DataSource dataSource = DataSource.getInstance();
 
@@ -67,100 +65,32 @@ public class EmployeeRepositoryPostgres implements EmployeeRepository {
     }
 
     @Override
-    public List<Employee> findAll() {
-        List<Employee> result = new ArrayList<>();
-        try (Connection con = dataSource.getConnection();
-             PreparedStatement ps = con.prepareStatement(SQL_EMPLOYEE_ALL_FIELDS);
-             ResultSet rs = ps.executeQuery()) {
-            result = rsToEmployees(rs);
-        } catch (SQLException e) {
-            log.error("error while reading from employee");
-            throw new DatabaseException(e);
-        }
-        return result;
+    protected String getFindAllSql() {
+        return SQL_EMPLOYEE_ALL_FIELDS;
     }
 
     @Override
-    public Optional<Employee> find(Integer id) {
-        List<Employee> result;
-        try (Connection con = dataSource.getConnection();
-             PreparedStatement ps = con.prepareStatement(FIND_EMPLOYEE_BY_ID)) {
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            result = rsToEmployees(rs);
-        } catch (SQLException e) {
-            log.error("error while reading from employee");
-            throw new DatabaseException(e);
-        }
-        return result.stream().findAny();
+    protected String getFindOneSql() {
+        return FIND_EMPLOYEE_BY_ID;
     }
 
     @Override
-    public Employee save(Employee employee) {
-        return employee.getId() == null ? insert(employee) : update(employee);
-    }
-
-    private Employee update(Employee employee) {
-        try (Connection con = dataSource.getConnection();
-             PreparedStatement ps = con.prepareStatement(
-                    "UPDATE employee set name=?, salary=? " +
-                            "WHERE id=?")) {
-            ps.setString(1, employee.getName());
-            ps.setInt(2, employee.getSalary());
-            ps.setInt(3, employee.getId());
-            if (ps.executeUpdate() > 0) {
-                return employee;
-            }
-            return null;
-        } catch (SQLException e) {
-            log.error("error while reading from employee");
-            throw new DatabaseException(e);
-        }
-    }
-
-    private Employee insert(Employee employee) {
-        ResultSet rs = null;
-        try (Connection con = dataSource.getConnection();
-             PreparedStatement ps = con.prepareStatement(
-                     "INSERT INTO employee (name, salary) " +
-                     "VALUES (?, ?) RETURNING id")) {
-            ps.setString(1, employee.getName());
-            ps.setInt(2, employee.getSalary());
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return employee.withId(rs.getInt(ID));
-            }
-            return null;
-        } catch (SQLException e) {
-            log.error("error while reading from employee");
-            throw new DatabaseException(e);
-        } finally {
-            close(rs);
-        }
+    protected String getUpdateSql() {
+        return UPDATE_EMPLOYEE_SET_NAME_SALARY_WHERE_ID;
     }
 
     @Override
-    public Optional<Employee> remove(Integer id) {
-        try (Connection con = dataSource.getConnection();
-             PreparedStatement ps = con.prepareStatement(
-                     "DELETE FROM employee " +
-                             "WHERE id=?")) {
-            ps.setInt(1, id);
-            Optional<Employee> employee = find(id);
-            if (employee.isEmpty()) {
-                return employee;
-            }
-            if (ps.executeUpdate() > 0) {
-                return employee;
-            }
-            return Optional.empty();
-        } catch (SQLException e) {
-            log.error("error while reading from employee");
-            throw new DatabaseException(e);
-        }
+    protected String getInsertSql() {
+        return INSERT_INTO_EMPLOYEE_NAME_SALARY_VALUES_RETURNING_ID;
     }
 
-    private List<Employee> rsToEmployees(ResultSet rs) throws SQLException {
+    @Override
+    protected String getDeleteSql() {
+        return DELETE_FROM_EMPLOYEE_WHERE_ID;
+    }
+
+    @Override
+    protected List<Employee> getItems(ResultSet rs) throws SQLException {
         Map<Integer, Employee> employeeMap = new LinkedHashMap<>();
         Map<Integer, Department> departmentMap = new HashMap<>();
         Map<Integer, City> cityMap = new HashMap<>();
@@ -195,52 +125,15 @@ public class EmployeeRepositoryPostgres implements EmployeeRepository {
         return new ArrayList<>(employeeMap.values());
     }
 
-    private static Integer getInteger(ResultSet rs, String tId) throws SQLException {
-        return rs.getObject(tId, Integer.class);
+    protected void prepareForUpdate(Employee employee, PreparedStatement ps) throws SQLException {
+        ps.setString(1, employee.getName());
+        ps.setInt(2, employee.getSalary());
+        ps.setInt(3, employee.getId());
     }
 
-    private static <K, V> V putIfAbsentAndReturn(Map<K, V> map, K key, V value) {
-        if (key == null) {
-            return null;
-        }
-        map.putIfAbsent(key, value);
-        return map.get(key);
+    protected void prepareForInsert(Employee employee, PreparedStatement ps) throws SQLException {
+        ps.setString(1, employee.getName());
+        ps.setInt(2, employee.getSalary());
     }
 
-    private String getRsString(ResultSet rs, String columnName) {
-        try {
-            return rs.getString(columnName);
-        } catch (SQLException e) {
-            throw new DatabaseException(e);
-        }
-    }
-
-    private Integer getRsInt(ResultSet rs, String columnName) {
-        try {
-            return rs.getInt(columnName);
-        } catch (SQLException e) {
-            throw new DatabaseException(e);
-        }
-    }
-
-    private void close(AutoCloseable closeable) {
-        try {
-            if (closeable != null) {
-                closeable.close();
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-    }
-
-    private void rollbackWithLogging(Connection con, SQLException e) {
-        log.error(e.getMessage(), e);
-        try {
-            if (con != null) {
-                con.rollback();
-            }
-        } catch (SQLException e1) {
-            log.error(e1.getMessage(), e1);
-        }
-    }
 }

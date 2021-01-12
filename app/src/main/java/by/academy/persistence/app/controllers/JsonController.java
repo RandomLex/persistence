@@ -1,13 +1,16 @@
 package by.academy.persistence.app.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class JsonController extends HttpServlet {
     protected void toJson(Object obj, HttpServletResponse resp) throws ServletException, IOException {
@@ -19,5 +22,23 @@ public class JsonController extends HttpServlet {
         PrintWriter out = resp.getWriter();
         out.print(json);
         out.flush();
+    }
+
+    @SneakyThrows
+    protected  <T> T toObject(Class<T> clazz, HttpServletRequest req) {
+        String json = req.getReader().lines().collect(Collectors.joining());
+//        PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator
+//                .builder()
+//                .allowIfSubType(Map.class)
+//                .allowIfSubType(List.class)
+//                .allowIfSubType(Set.class)
+//                .allowIfSubType(Number.class)
+//                .build();
+        ObjectMapper mapper = new ObjectMapper();
+//        JsonMapper.builder()
+//                .activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL)
+//                .build();
+
+        return mapper.readValue(json, clazz);
     }
 }

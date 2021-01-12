@@ -1,7 +1,6 @@
 package by.academy.persistence.app.services;
 
 import by.academy.persistence.app.repositories.EmployeeRepository;
-import by.academy.persistence.app.repositories.EmployeeRepositoryInMemory;
 import by.academy.persistence.app.repositories.EmployeeRepositoryPostgres;
 import by.academy.persistence.model.Employee;
 import lombok.extern.slf4j.Slf4j;
@@ -47,5 +46,15 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .withSalary(salary));
         log.info("A new Employee is added : {}", employee);
         return employee;
+    }
+
+    @Override
+    public Employee saveEmployee(Employee employee) {
+        return repository.save(employee);
+    }
+
+    @Override
+    public Optional<Employee> deleteEmployee(Integer id) {
+        return repository.remove(id);
     }
 }

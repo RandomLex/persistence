@@ -1,7 +1,7 @@
 package by.academy.persistence.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -12,11 +12,11 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class City extends AbstractEntity {
     private String name;
-    @JsonBackReference
+
     private List<Department> departments = new ArrayList<>();
-    @JsonManagedReference
     public City withId(Integer id) {
         setId(id);
         return this;

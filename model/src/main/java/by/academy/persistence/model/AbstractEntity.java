@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public abstract class AbstractEntity {
-    private Integer id;
+    protected Integer id;
 }

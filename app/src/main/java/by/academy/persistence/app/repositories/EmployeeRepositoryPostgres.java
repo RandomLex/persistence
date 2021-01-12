@@ -96,13 +96,68 @@ public class EmployeeRepositoryPostgres implements EmployeeRepository {
     }
 
     @Override
-    public Employee save(Employee entity) {
-        return null;
+    public Employee save(Employee employee) {
+        return employee.getId() == null ? insert(employee) : update(employee);
+    }
+
+    private Employee update(Employee employee) {
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                    "UPDATE employee set name=?, salary=? " +
+                            "WHERE id=?")) {
+            ps.setString(1, employee.getName());
+            ps.setInt(2, employee.getSalary());
+            ps.setInt(3, employee.getId());
+            if (ps.executeUpdate() > 0) {
+                return employee;
+            }
+            return null;
+        } catch (SQLException e) {
+            log.error("error while reading from employee");
+            throw new DatabaseException(e);
+        }
+    }
+
+    private Employee insert(Employee employee) {
+        ResultSet rs = null;
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "INSERT INTO employee (name, salary) " +
+                     "VALUES (?, ?) RETURNING id")) {
+            ps.setString(1, employee.getName());
+            ps.setInt(2, employee.getSalary());
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return employee.withId(rs.getInt(ID));
+            }
+            return null;
+        } catch (SQLException e) {
+            log.error("error while reading from employee");
+            throw new DatabaseException(e);
+        } finally {
+            close(rs);
+        }
     }
 
     @Override
-    public Optional<Employee> remove(Employee entity) {
-        return Optional.empty();
+    public Optional<Employee> remove(Integer id) {
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "DELETE FROM employee " +
+                             "WHERE id=?")) {
+            ps.setInt(1, id);
+            Optional<Employee> employee = find(id);
+            if (employee.isEmpty()) {
+                return employee;
+            }
+            if (ps.executeUpdate() > 0) {
+                return employee;
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            log.error("error while reading from employee");
+            throw new DatabaseException(e);
+        }
     }
 
     private List<Employee> rsToEmployees(ResultSet rs) throws SQLException {
@@ -165,6 +220,27 @@ public class EmployeeRepositoryPostgres implements EmployeeRepository {
             return rs.getInt(columnName);
         } catch (SQLException e) {
             throw new DatabaseException(e);
+        }
+    }
+
+    private void close(AutoCloseable closeable) {
+        try {
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    private void rollbackWithLogging(Connection con, SQLException e) {
+        log.error(e.getMessage(), e);
+        try {
+            if (con != null) {
+                con.rollback();
+            }
+        } catch (SQLException e1) {
+            log.error(e1.getMessage(), e1);
         }
     }
 }

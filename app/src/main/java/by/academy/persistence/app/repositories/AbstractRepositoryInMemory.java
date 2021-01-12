@@ -39,7 +39,8 @@ public abstract class AbstractRepositoryInMemory<T extends AbstractEntity> imple
         return map.get(id);
     }
 
-    public Optional<T> remove(T entity) {
-        return Optional.ofNullable(map.remove(entity.getId()));
+    public Optional<T> remove(Integer id) {
+
+        return Optional.ofNullable(map.remove(id));
     }
 }

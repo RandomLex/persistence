@@ -11,4 +11,8 @@ public interface EmployeeService {
     Optional<Employee> getEmployee(Integer id);
 
     Employee saveEmployee(String name, int salary);
+
+    Employee saveEmployee(Employee employee);
+
+    Optional<Employee> deleteEmployee(Integer id);
 }

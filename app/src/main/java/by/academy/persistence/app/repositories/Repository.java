@@ -7,5 +7,5 @@ public interface Repository<T> {
     List<T> findAll();
     Optional<T> find(Integer id);
     T save(T entity);
-    Optional<T> remove(T entity);
+    Optional<T> remove(Integer id);
 }

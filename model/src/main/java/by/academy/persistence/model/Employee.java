@@ -1,6 +1,7 @@
 package by.academy.persistence.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,9 +14,9 @@ import java.util.Set;
 @ToString(callSuper = true)
 @Data
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Employee extends AbstractEntity {
     private String name;
-    @JsonManagedReference
     private Set<Department> departments = new LinkedHashSet<>();
     private int salary;
     private Title title;

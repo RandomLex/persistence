@@ -14,8 +14,17 @@ import java.util.Optional;
 
 @Slf4j
 public abstract class AbstractRepositoryPostgres<T extends AbstractEntity> implements Repository<T> {
-    private static final String ID = "id";
-    private static final String NAME = "name";
+    protected static final String ID = "id";
+    protected static final String NAME = "name";
+    protected static final String T_ID = "t_id";
+    protected static final String C_ID = "c_id";
+    protected static final String D_ID = "d_id";
+    protected static final String E_ID = "e_id";
+    protected static final String E_NAME = "e_name";
+    protected static final String SALARY = "salary";
+    protected static final String T_NAME = "t_name";
+    protected static final String D_NAME = "d_name";
+    protected static final String C_NAME = "c_name";
 
     private final DataSource dataSource = DataSource.getInstance();
 
@@ -90,7 +99,7 @@ public abstract class AbstractRepositoryPostgres<T extends AbstractEntity> imple
         String sql = getInsertSql();
         ResultSet rs = null;
         try (Connection con = dataSource.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(sql + " RETURNING id")) {
             prepareForInsert(entity, ps);
             rs = ps.executeQuery();
             if (rs.next()) {

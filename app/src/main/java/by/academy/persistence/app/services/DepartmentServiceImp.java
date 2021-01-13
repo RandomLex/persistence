@@ -1,9 +1,9 @@
 package by.academy.persistence.app.services;
 
 import by.academy.persistence.app.repositories.CityRepository;
-import by.academy.persistence.app.repositories.CityRepositoryInMemory;
+import by.academy.persistence.app.repositories.CityRepositoryPostgres;
 import by.academy.persistence.app.repositories.DepartmentRepository;
-import by.academy.persistence.app.repositories.DepartmentRepositoryInMemory;
+import by.academy.persistence.app.repositories.DepartmentRepositoryPostgres;
 import by.academy.persistence.model.City;
 import by.academy.persistence.model.Department;
 
@@ -12,8 +12,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class DepartmentServiceImp implements DepartmentService {
-    private final DepartmentRepository depRepository = DepartmentRepositoryInMemory.getInstance();
-    private final CityRepository cityRepository = CityRepositoryInMemory.getInstance();
+    private final DepartmentRepository depRepository = DepartmentRepositoryPostgres.getInstance();
+    private final CityRepository cityRepository = CityRepositoryPostgres.getInstance();
 
     @Override
     public List<Department> getAllDepartments() {
@@ -31,11 +31,11 @@ public class DepartmentServiceImp implements DepartmentService {
         if (city == null) {
             return depRepository.save(department);
         }
-        city = cityRepository.findAll().stream()
+        City existingCity = cityRepository.findAll().stream()
                 .filter(haveSameName(city))
                 .findFirst()
-                .orElse(cityRepository.save(city.withDepartment(department)));
-        return depRepository.save(department.withCity(city));
+                .orElseGet(() -> cityRepository.save(city.withDepartment(department)));
+        return depRepository.save(department.withCity(existingCity));
     }
 
     private Predicate<City> haveSameName(City city) {

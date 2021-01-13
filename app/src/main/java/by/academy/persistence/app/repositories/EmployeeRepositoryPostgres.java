@@ -33,20 +33,12 @@ public class EmployeeRepositoryPostgres extends AbstractRepositoryPostgres<Emplo
     //language=SQL
     private static final String ONE_EMPLOYEE_FILTER = " WHERE e.id = ?";
     private static final String FIND_EMPLOYEE_BY_ID = SQL_EMPLOYEE_ALL_FIELDS + ONE_EMPLOYEE_FILTER;
-    private static final String T_ID = "t_id";
-    private static final String C_ID = "c_id";
-    private static final String D_ID = "d_id";
-    private static final String E_ID = "e_id";
-    private static final String E_NAME = "e_name";
-    private static final String SALARY = "salary";
-    private static final String T_NAME = "t_name";
-    private static final String D_NAME = "d_name";
-    private static final String C_NAME = "c_name";
+    //language=SQL
     private static final String UPDATE_EMPLOYEE_SET_NAME_SALARY_WHERE_ID = "UPDATE employee set name=?, salary=? WHERE id=?";
-    protected static final String INSERT_INTO_EMPLOYEE_NAME_SALARY_VALUES_RETURNING_ID = "INSERT INTO employee (name, salary) VALUES (?, ?) RETURNING id";
+    //language=SQL
+    protected static final String INSERT_INTO_EMPLOYEE_NAME_SALARY_VALUES_RETURNING_ID = "INSERT INTO employee (name, salary) VALUES (?, ?)";
+    //language=SQL
     private static final String DELETE_FROM_EMPLOYEE_WHERE_ID = "DELETE FROM employee WHERE id=?";
-
-    private final DataSource dataSource = DataSource.getInstance();
 
     private static volatile EmployeeRepositoryPostgres instance;
 

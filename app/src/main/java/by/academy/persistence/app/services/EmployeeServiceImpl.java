@@ -2,6 +2,7 @@ package by.academy.persistence.app.services;
 
 import by.academy.persistence.app.repositories.EmployeeRepository;
 import by.academy.persistence.app.repositories.EmployeeRepositoryPostgres;
+import by.academy.persistence.app.repositories.RepositoryFactory;
 import by.academy.persistence.model.Employee;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +28,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return instance;
     }
 
-    private final EmployeeRepository repository = EmployeeRepositoryPostgres.getInstance();
+    private final EmployeeRepository repository = RepositoryFactory.getEmployeeRepository();
 
     @Override
     public List<Employee> getAllEmployees() {

@@ -4,6 +4,7 @@ import by.academy.persistence.app.repositories.CityRepository;
 import by.academy.persistence.app.repositories.CityRepositoryPostgres;
 import by.academy.persistence.app.repositories.DepartmentRepository;
 import by.academy.persistence.app.repositories.DepartmentRepositoryPostgres;
+import by.academy.persistence.app.repositories.RepositoryFactory;
 import by.academy.persistence.model.City;
 import by.academy.persistence.model.Department;
 
@@ -12,8 +13,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class DepartmentServiceImp implements DepartmentService {
-    private final DepartmentRepository depRepository = DepartmentRepositoryPostgres.getInstance();
-    private final CityRepository cityRepository = CityRepositoryPostgres.getInstance();
+    private final DepartmentRepository depRepository = RepositoryFactory.getDepartmentRepository();
+    private final CityRepository cityRepository = RepositoryFactory.getCityRepository();
 
     @Override
     public List<Department> getAllDepartments() {

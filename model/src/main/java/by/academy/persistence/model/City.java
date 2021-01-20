@@ -7,16 +7,18 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "departments")
 @Data
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class City extends AbstractEntity {
     private String name;
 
-    private List<Department> departments = new ArrayList<>();
+    private Set<Department> departments = new HashSet<>();
     public City withId(Integer id) {
         setId(id);
         return this;
@@ -30,5 +32,13 @@ public class City extends AbstractEntity {
     public City withName(String name) {
         setName(name);
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "name='" + name + '\'' +
+//                ", departments=" + departments +
+                '}';
     }
 }

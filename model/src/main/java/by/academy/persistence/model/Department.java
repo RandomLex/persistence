@@ -7,7 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -16,7 +18,7 @@ import java.util.List;
 public class Department extends AbstractEntity {
     private String name;
     private City city;
-    private List<Employee> employees = new ArrayList<>();
+    private Set<Employee> employees = new HashSet<>();
 
     public Department withId(Integer id) {
         setId(id);
@@ -36,5 +38,14 @@ public class Department extends AbstractEntity {
     public Department withEmployee(Employee employee) {
         employees.add(employee);
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Department{" +
+                "name='" + name + '\'' +
+                ", city=" + city +
+//                ", employees=" + employees +
+                '}';
     }
 }

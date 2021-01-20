@@ -10,7 +10,7 @@ import lombok.ToString;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "departments")
 @ToString(callSuper = true)
 @Data
 @NoArgsConstructor
@@ -47,5 +47,16 @@ public class Employee extends AbstractEntity {
     public Employee withTitle(Title title) {
         setTitle(title);
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id='" + id + '\'' +
+                "name='" + name + '\'' +
+                ", departments=" + departments +
+                ", salary=" + salary +
+                ", title=" + title +
+                '}';
     }
 }

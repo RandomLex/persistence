@@ -7,6 +7,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -15,10 +20,18 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@Entity
 public class Employee extends AbstractEntity {
     private String name;
+    @ManyToMany
+    @JoinTable(
+            name = "department_employee",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "department_id")
+    )
     private Set<Department> departments = new LinkedHashSet<>();
-    private int salary;
+    private Integer salary;
+    @OneToOne
     private Title title;
 
     public Employee withId(Integer id) {

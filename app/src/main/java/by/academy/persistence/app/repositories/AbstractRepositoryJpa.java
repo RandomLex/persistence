@@ -49,7 +49,11 @@ public abstract class AbstractRepositoryJpa<T extends AbstractEntity> implements
         EntityManager em = helper.getEntityManager();
         EntityTransaction trx = em.getTransaction();
         trx.begin();
-        em.persist(entity);
+        if (entity.getId() == null) {
+            em.persist(entity);
+        } else {
+            em.merge(entity);
+        }
         trx.commit();
         em.close();
         return entity;

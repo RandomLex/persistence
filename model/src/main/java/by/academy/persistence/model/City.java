@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,9 +18,10 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@Entity
 public class City extends AbstractEntity {
     private String name;
-
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
     private Set<Department> departments = new HashSet<>();
     public City withId(Integer id) {
         setId(id);

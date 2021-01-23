@@ -25,17 +25,17 @@ public class Start {
         EntityTransaction trx = em.getTransaction();
         trx.begin();
 
-//        Employee employee = em.find(Employee.class, 1);
+        Employee entity = em.find(Employee.class, 1);
 //        System.out.println("!!! " + employee);
 //        Title entity = em.find(Title.class, 3);
-
-        Title entity = new Title()
-                .withName("Директор");
+//
+//        Title entity = new Title()
+//                .withName("Директор");
 
 //        City entity = new City()
 //                .withName("Могилёв");
 //
-        em.persist(entity);
+//        em.persist(entity);
         printWithKey(entity);
 
         trx.commit();

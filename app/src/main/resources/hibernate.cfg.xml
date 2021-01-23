@@ -25,9 +25,9 @@
         <property name="hibernate.dbcp.minIdle">5</property>
         <property name="hibernate.dbcp.maxWaitMillis">-1</property>
 
-        <mapping resource="City.hbm.xml"/>
-        <mapping resource="Department.hbm.xml"/>
-        <mapping resource="Title.hbm.xml"/>
-        <mapping resource="Employee.hbm.xml"/>
+        <mapping class="by.academy.persistence.model.City"/>
+        <mapping class="by.academy.persistence.model.Department"/>
+        <mapping class="by.academy.persistence.model.Title"/>
+        <mapping class="by.academy.persistence.model.Employee"/>
     </session-factory>
 </hibernate-configuration>

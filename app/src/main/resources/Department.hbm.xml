@@ -6,7 +6,7 @@
     <class name="by.academy.persistence.model.Department" table="department">
         <id name="id" type="int">
             <column name="id"/>
-            <generator class="native"/>
+            <generator class="identity"/>
         </id>
         <property name="name">
             <column name="name"/>

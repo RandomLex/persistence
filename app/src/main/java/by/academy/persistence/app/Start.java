@@ -15,8 +15,9 @@ import javax.persistence.EntityTransaction;
 
 public class Start {
     public static void main(String[] args) {
-//        Configuration cfg = new Configuration().configure();
-//        SessionFactory sessionFactory = cfg.buildSessionFactory();
+        Configuration cfg = new Configuration().configure();
+        SessionFactory sessionFactory = cfg.buildSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
 
         EntityManagerHelper helper = EntityManagerHelper.getInstance();
 
@@ -24,17 +25,24 @@ public class Start {
         EntityTransaction trx = em.getTransaction();
         trx.begin();
 
-        Employee employee = em.find(Employee.class, 1);
-        System.out.println("!!! " + employee);
-//        Title manager = em.find(Title.class, 3);
-//        Title manager = new Title()
-//                .withId(11)
-//                .withName("Менеджер");
-//        em.persist(manager);
+//        Employee employee = em.find(Employee.class, 1);
+//        System.out.println("!!! " + employee);
+//        Title entity = em.find(Title.class, 3);
+
+        Title entity = new Title()
+                .withName("Директор");
+
+//        City entity = new City()
+//                .withName("Могилёв");
 //
-//        System.out.println(manager);
+        em.persist(entity);
+        printWithKey(entity);
 
         trx.commit();
         em.close();
+    }
+
+    private static void printWithKey(Object obj) {
+        System.out.println("!!!" + obj);
     }
 }

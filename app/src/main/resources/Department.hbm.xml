@@ -22,5 +22,11 @@
             <many-to-many column="employee_id" class="by.academy.persistence.model.Employee"/>
         </set>
 
+<!--        <list name="employees" table="department_employee" inverse="true">-->
+<!--            <key column="department_id"/>-->
+<!--            <index column="employee_id"/>-->
+<!--            <many-to-many column="employee_id" class="by.academy.persistence.model.Employee"/>-->
+<!--        </list>-->
+
     </class>
 </hibernate-mapping>

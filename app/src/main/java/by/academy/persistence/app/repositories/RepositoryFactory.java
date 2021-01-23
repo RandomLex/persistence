@@ -21,6 +21,8 @@ public class RepositoryFactory {
 
     public static EmployeeRepository getEmployeeRepository() {
         switch (type) {
+            case JPA:
+                return EmployeeRepositoryJpa.getInstance();
             case POSTGRES:
                 return EmployeeRepositoryPostgres.getInstance();
             case MEMORY:
@@ -31,6 +33,8 @@ public class RepositoryFactory {
 
     public static DepartmentRepository getDepartmentRepository() {
         switch (type) {
+            case JPA:
+                return DepartmentRepositoryJpa.getInstance();
             case POSTGRES:
                 return DepartmentRepositoryPostgres.getInstance();
             case MEMORY:
@@ -41,6 +45,8 @@ public class RepositoryFactory {
 
     public static CityRepository getCityRepository() {
         switch (type) {
+            case JPA:
+                return CityRepositoryJpa.getInstance();
             case POSTGRES:
                 return CityRepositoryPostgres.getInstance();
             case MEMORY:

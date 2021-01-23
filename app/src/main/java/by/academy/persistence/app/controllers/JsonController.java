@@ -1,6 +1,7 @@
 package by.academy.persistence.app.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.SneakyThrows;
 
 import javax.servlet.ServletException;
@@ -15,7 +16,8 @@ import java.util.stream.Collectors;
 public class JsonController extends HttpServlet {
     protected void toJson(Object obj, HttpServletResponse resp) throws ServletException, IOException {
         obj = (obj instanceof Optional) ? ((Optional<?>) obj).orElse(null) : obj;
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper()
+                .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         String json = mapper.writeValueAsString(obj);
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");

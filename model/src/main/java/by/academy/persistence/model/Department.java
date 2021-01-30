@@ -23,9 +23,12 @@ import java.util.Set;
 @Entity
 public class Department extends AbstractEntity {
     private String name;
+
     @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
+
+
     @ManyToMany(mappedBy = "departments", cascade = CascadeType.ALL)
     private Set<Employee> employees = new HashSet<>();
 

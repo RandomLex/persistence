@@ -29,5 +29,11 @@
         <mapping class="by.academy.persistence.model.Department"/>
         <mapping class="by.academy.persistence.model.Title"/>
         <mapping class="by.academy.persistence.model.Employee"/>
+        <mapping class="by.academy.persistence.model.examples.Car"/>
+        <mapping class="by.academy.persistence.model.examples.Report"/>
+        <mapping class="by.academy.persistence.model.examples.Product"/>
+        <mapping class="by.academy.persistence.model.examples.ProductType"/>
+
+
     </session-factory>
 </hibernate-configuration>

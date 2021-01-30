@@ -30,6 +30,7 @@ public class Employee extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "department_id")
     )
     private Set<Department> departments = new LinkedHashSet<>();
+
     private Integer salary;
     @OneToOne
     private Title title;

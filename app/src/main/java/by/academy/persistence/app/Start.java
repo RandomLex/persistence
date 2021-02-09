@@ -1,28 +1,16 @@
 package by.academy.persistence.app;
 
 import by.academy.persistence.app.repositories.EntityManagerHelper;
-import by.academy.persistence.model.City;
-import by.academy.persistence.model.Department;
-import by.academy.persistence.model.Employee;
-import by.academy.persistence.model.Title;
-import by.academy.persistence.model.examples.AudioSystem;
-import by.academy.persistence.model.examples.Car;
-import by.academy.persistence.model.examples.Engine;
-import by.academy.persistence.model.examples.Product;
-import by.academy.persistence.model.examples.ProductType;
-import by.academy.persistence.model.examples.Report;
-import by.academy.persistence.model.examples.ReportKey;
+import by.academy.persistence.model.hierarchy.table.Animal;
+import by.academy.persistence.model.hierarchy.table.Bird;
+import by.academy.persistence.model.hierarchy.table.Fish;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 public class Start {
     public static void main(String[] args) {
@@ -36,7 +24,74 @@ public class Start {
         EntityTransaction trx = em.getTransaction();
         trx.begin();
 
-        em.remove(em.find(ProductType.class, 4L));
+        List<Animal> animals = em.createQuery("from Animal ", Animal.class).getResultList();
+        animals.forEach(Start::printWithKey);
+
+//        Animal it = Animal.builder()
+//                .origin("Нечто")
+//                .build();
+//        em.persist(it);
+//        Bird eagle = Bird.builder()
+//                .origin("Eagle")
+//                .flyable(true)
+//                .growing("Nested")
+//                .build();
+//
+//        Fish shark = Fish.builder()
+//                .origin("Shark")
+//                .poison(false)
+//                .skeleton("Хрящевые")
+//                .build();
+////
+//        em.persist(eagle);
+//        em.persist(shark);
+
+
+
+//        Post marryChristmas = em.find(Post.class, 6L);
+//        printWithKey(marryChristmas);
+
+//        Post newYear = em.find(Post.class, 5L);
+//        newYear.getTags().clear();
+
+//
+//        em.merge(newYear);
+//
+//        em.remove(newYear);
+
+
+//        em.remove(em.find(Post.class, 3L));
+//        printWithKey(post);
+
+//        Post newYearPost = Post.builder()
+//                .name("Happy New Year")
+//                .tags(new HashSet<>())
+//                .build();
+//
+//        Post marryChristmas = Post.builder()
+//                .name("Marry Christmas")
+//                .tags(new HashSet<>())
+//                .build();
+//
+//        Tag holiday = Tag.builder()
+//                .posts(new HashSet<>())
+//                .name("Holyday")
+//                .build();
+//
+//        Tag favorite = Tag.builder()
+//                .name("Favorite")
+//                .posts(new HashSet<>())
+//                .build();
+//
+//        newYearPost.addTag(holiday);
+//        newYearPost.addTag(favorite);
+//
+//        marryChristmas.addTag(holiday);
+//
+//        em.persist(newYearPost);
+//        em.persist(marryChristmas);
+
+//        em.remove(em.find(ProductType.class, 4L));
 
 //        Product apple;
 //        Product asus;

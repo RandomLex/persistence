@@ -25,14 +25,32 @@
         <property name="hibernate.dbcp.minIdle">5</property>
         <property name="hibernate.dbcp.maxWaitMillis">-1</property>
 
-        <mapping class="by.academy.persistence.model.City"/>
-        <mapping class="by.academy.persistence.model.Department"/>
-        <mapping class="by.academy.persistence.model.Title"/>
-        <mapping class="by.academy.persistence.model.Employee"/>
-        <mapping class="by.academy.persistence.model.examples.Car"/>
-        <mapping class="by.academy.persistence.model.examples.Report"/>
-        <mapping class="by.academy.persistence.model.examples.Product"/>
-        <mapping class="by.academy.persistence.model.examples.ProductType"/>
+<!--        <mapping class="by.academy.persistence.model.City"/>-->
+<!--        <mapping class="by.academy.persistence.model.Department"/>-->
+<!--        <mapping class="by.academy.persistence.model.Title"/>-->
+<!--        <mapping class="by.academy.persistence.model.Employee"/>-->
+<!--        <mapping class="by.academy.persistence.model.examples.Car"/>-->
+<!--        <mapping class="by.academy.persistence.model.examples.Report"/>-->
+<!--        <mapping class="by.academy.persistence.model.examples.Product"/>-->
+<!--        <mapping class="by.academy.persistence.model.examples.ProductType"/>-->
+
+<!--        <mapping class="by.academy.persistence.model.examples.many.Post"/>-->
+<!--        <mapping class="by.academy.persistence.model.examples.many.Tag"/>-->
+
+<!--        <mapping class="by.academy.persistence.model.hierarchy.mapped.Bird"/>-->
+<!--        <mapping class="by.academy.persistence.model.hierarchy.mapped.Fish"/>-->
+
+<!--        <mapping class="by.academy.persistence.model.hierarchy.single.Animal"/>-->
+<!--        <mapping class="by.academy.persistence.model.hierarchy.single.Bird"/>-->
+<!--        <mapping class="by.academy.persistence.model.hierarchy.single.Fish"/>-->
+
+<!--        <mapping class="by.academy.persistence.model.hierarchy.join.Animal"/>-->
+<!--        <mapping class="by.academy.persistence.model.hierarchy.join.Bird"/>-->
+<!--        <mapping class="by.academy.persistence.model.hierarchy.join.Fish"/>-->
+
+        <mapping class="by.academy.persistence.model.hierarchy.table.Animal"/>
+        <mapping class="by.academy.persistence.model.hierarchy.table.Bird"/>
+        <mapping class="by.academy.persistence.model.hierarchy.table.Fish"/>
 
 
     </session-factory>

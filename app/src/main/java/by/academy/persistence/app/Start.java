@@ -29,8 +29,29 @@ public class Start {
         EntityTransaction trx = em.getTransaction();
         trx.begin();
 
-        List<Animal> animals = em.createQuery("from Animal ", Animal.class).getResultList();
-        animals.forEach(Start::printWithKey);
+        //*select simple
+//        TypedQuery<Product> query = em.createQuery("select p from Product p", Product.class);
+//        query.getResultList().forEach(Start::printWithKey);
+
+//        CriteriaBuilder cb = em.getCriteriaBuilder();
+//        CriteriaQuery<Product> query = cb.createQuery(Product.class);
+//        Root<Product> productRoot = query.from(Product.class);
+//        query.select(productRoot);
+//        em.createQuery(query).getResultList().forEach(Start::printWithKey);
+
+
+        //*from
+//        TypedQuery<Product> query = em.createQuery("from Product ", Product.class);
+//        query.getResultList().forEach(Start::printWithKey);
+
+//        CriteriaBuilder cb = em.getCriteriaBuilder();
+//        CriteriaQuery<Product> query = cb.createQuery(Product.class);
+//        query.from(Product.class);
+//        em.createQuery(query).getResultList().forEach(Start::printWithKey);
+
+
+//        List<Animal> animals = em.createQuery("from Animal ", Animal.class).getResultList();
+//        animals.forEach(Start::printWithKey);
 
 //        Animal it = Animal.builder()
 //                .origin("Нечто")

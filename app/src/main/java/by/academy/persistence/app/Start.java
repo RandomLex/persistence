@@ -1,15 +1,20 @@
 package by.academy.persistence.app;
 
 import by.academy.persistence.app.repositories.EntityManagerHelper;
+import by.academy.persistence.app.repositories.ProductTypeRepository;
+import by.academy.persistence.model.examples.Product;
+import by.academy.persistence.model.examples.ProductType;
 import by.academy.persistence.model.hierarchy.table.Animal;
-import by.academy.persistence.model.hierarchy.table.Bird;
-import by.academy.persistence.model.hierarchy.table.Fish;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class Start {
@@ -90,6 +95,12 @@ public class Start {
 //
 //        em.persist(newYearPost);
 //        em.persist(marryChristmas);
+
+//        ProductType comp = em.find(ProductType.class, 1L);
+        ProductTypeRepository rep = new ProductTypeRepository();
+        ProductType comp = rep.find(1L);
+        printWithKey(comp);
+//        comp.getProducts().stream().findFirst().get();
 
 //        em.remove(em.find(ProductType.class, 4L));
 

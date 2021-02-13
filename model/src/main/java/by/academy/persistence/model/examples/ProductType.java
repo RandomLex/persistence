@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,6 +31,7 @@ public class ProductType {
 
     private String name;
 
-    @OneToMany(mappedBy = "productType", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "productType", cascade = CascadeType.PERSIST, orphanRemoval = true,
+        fetch = FetchType.LAZY)
     private Set<Product> products;
 }

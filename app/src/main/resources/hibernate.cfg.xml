@@ -32,8 +32,8 @@
 <!--        <mapping class="by.academy.persistence.model.Employee"/>-->
 <!--        <mapping class="by.academy.persistence.model.examples.Car"/>-->
 <!--        <mapping class="by.academy.persistence.model.examples.Report"/>-->
-        <mapping class="by.academy.persistence.model.examples.Product"/>
-        <mapping class="by.academy.persistence.model.examples.ProductType"/>
+        <mapping class="com.academy.persistence.model.examples.Product"/>
+        <mapping class="com.academy.persistence.model.examples.ProductType"/>
 
 <!--        <mapping class="by.academy.persistence.model.examples.many.Post"/>-->
 <!--        <mapping class="by.academy.persistence.model.examples.many.Tag"/>-->

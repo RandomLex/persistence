@@ -1,25 +1,10 @@
 package com.academy.persistence.app.repositories;
 
 import com.academy.persistence.model.Employee;
+import org.springframework.stereotype.Component;
 
-
+@Component("memory")
 public class EmployeeRepositoryInMemory extends AbstractRepositoryInMemory<Employee> implements EmployeeRepository {
-    private static volatile EmployeeRepositoryInMemory instance;
-    private EmployeeRepositoryInMemory() {
-
-    }
-
-    public static EmployeeRepositoryInMemory getInstance() {
-        if (instance == null) {
-            synchronized (EmployeeRepositoryInMemory.class) {
-                if (instance == null) {
-                    instance = new EmployeeRepositoryInMemory();
-                }
-            }
-        }
-        return instance;
-    }
-
     {
         map.put(1, new Employee()
                 .withId(1)

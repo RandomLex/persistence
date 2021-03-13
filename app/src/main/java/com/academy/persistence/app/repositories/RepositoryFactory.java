@@ -19,17 +19,17 @@ public class RepositoryFactory {
         type = RepositoryTypes.getTypeByStr(dbProperties.getProperty("repository.type"));
     }
 
-    public static EmployeeRepository getEmployeeRepository() {
-        switch (type) {
-            case JPA:
-                return EmployeeRepositoryJpa.getInstance();
-            case POSTGRES:
-                return EmployeeRepositoryPostgres.getInstance();
-            case MEMORY:
-            default:
-                return EmployeeRepositoryInMemory.getInstance();
-        }
-    }
+//    public static EmployeeRepository getEmployeeRepository() {
+//        switch (type) {
+//            case JPA:
+//                return EmployeeRepositoryJpa.getInstance();
+//            case POSTGRES:
+//                return EmployeeRepositoryPostgres.getInstance();
+//            case MEMORY:
+//            default:
+//                return EmployeeRepositoryInMemory.getInstance();
+//        }
+//    }
 
     public static DepartmentRepository getDepartmentRepository() {
         switch (type) {

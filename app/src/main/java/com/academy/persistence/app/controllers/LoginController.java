@@ -10,14 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/login")
+//@WebServlet("/login")
 public class LoginController extends HttpServlet {
-    private final EmployeeService service = EmployeeServiceImpl.getInstance();
-    @Override
-    public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("name");
-        String password = req.getParameter("password");
+//    private final EmployeeService service = EmployeeServiceImpl.getInstance();
+//    @Override
+//    public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        String name = req.getParameter("name");
+//        String password = req.getParameter("password");
 //        service.saveEmployee(name, Integer.parseInt(password));
-        req.getRequestDispatcher("/employee-controller").forward(req, resp);
-    }
+//        req.getRequestDispatcher("/employee-controller").forward(req, resp);
+//    }
 }

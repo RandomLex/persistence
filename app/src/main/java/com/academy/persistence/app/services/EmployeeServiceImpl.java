@@ -4,30 +4,36 @@ import com.academy.persistence.app.repositories.EmployeeRepository;
 import com.academy.persistence.app.repositories.RepositoryFactory;
 import com.academy.persistence.model.Employee;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
+@Component
+@PropertySource("classpath:app.properties")
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private static volatile EmployeeServiceImpl instance;
+    private EmployeeRepository repository;
 
-    public EmployeeServiceImpl() {
+    private Map<String, EmployeeRepository> repositoryMap;
+    @Value("${repository.type}")
+    private String repositoryType;
+
+    @PostConstruct
+    private void init() {
+        repository = repositoryMap.get(repositoryType);
     }
 
-    public static EmployeeServiceImpl getInstance() {
-        if (instance == null) {
-            synchronized (EmployeeServiceImpl.class) {
-                if (instance == null) {
-                    instance = new EmployeeServiceImpl();
-                }
-            }
-        }
-        return instance;
+    @Autowired
+    public void setRepositoryMap(Map<String, EmployeeRepository> repositoryMap) {
+        this.repositoryMap = repositoryMap;
     }
-
-    private final EmployeeRepository repository = RepositoryFactory.getEmployeeRepository();
 
     @Override
     public List<Employee> getAllEmployees() {

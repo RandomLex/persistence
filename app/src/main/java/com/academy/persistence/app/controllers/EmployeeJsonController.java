@@ -3,6 +3,8 @@ package com.academy.persistence.app.controllers;
 import com.academy.persistence.app.services.EmployeeService;
 import com.academy.persistence.app.services.EmployeeServiceImpl;
 import com.academy.persistence.model.Employee;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +16,12 @@ import java.io.IOException;
 public class EmployeeJsonController extends JsonController {
     private static final String ID = "id";
 
-    private final EmployeeService service = new EmployeeServiceImpl();
+    private final EmployeeService service;
+
+    public EmployeeJsonController() {
+        ApplicationContext ctx = new AnnotationConfigApplicationContext("com.academy.persistence.app");
+        service = ctx.getBean("employeeServiceImpl", EmployeeServiceImpl.class);
+    }
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

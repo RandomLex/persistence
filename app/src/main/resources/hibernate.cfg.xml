@@ -26,14 +26,14 @@
         <property name="hibernate.dbcp.maxWaitMillis">-1</property>
         <property name="hibernate.enable_lazy_load_no_trans">true</property>
 
-<!--        <mapping class="by.academy.persistence.model.City"/>-->
-<!--        <mapping class="by.academy.persistence.model.Department"/>-->
-<!--        <mapping class="by.academy.persistence.model.Title"/>-->
-<!--        <mapping class="by.academy.persistence.model.Employee"/>-->
+        <mapping class="com.academy.persistence.model.City"/>
+        <mapping class="com.academy.persistence.model.Department"/>
+        <mapping class="com.academy.persistence.model.Title"/>
+        <mapping class="com.academy.persistence.model.Employee"/>
 <!--        <mapping class="by.academy.persistence.model.examples.Car"/>-->
 <!--        <mapping class="by.academy.persistence.model.examples.Report"/>-->
-        <mapping class="com.academy.persistence.model.examples.Product"/>
-        <mapping class="com.academy.persistence.model.examples.ProductType"/>
+<!--        <mapping class="com.academy.persistence.model.examples.Product"/>-->
+<!--        <mapping class="com.academy.persistence.model.examples.ProductType"/>-->
 
 <!--        <mapping class="by.academy.persistence.model.examples.many.Post"/>-->
 <!--        <mapping class="by.academy.persistence.model.examples.many.Tag"/>-->

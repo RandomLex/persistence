@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/department")
+//@WebServlet("/department")
 public class DepartmentJsonController extends JsonController {
     private static final String ID = "id";
     private final DepartmentService service = new DepartmentServiceImp();

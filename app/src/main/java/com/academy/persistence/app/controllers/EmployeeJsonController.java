@@ -3,17 +3,18 @@ package com.academy.persistence.app.controllers;
 import com.academy.persistence.app.services.EmployeeService;
 import com.academy.persistence.model.Employee;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -24,38 +25,28 @@ public class EmployeeJsonController {
 
     private final EmployeeService service;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public List<Employee> getAll() {
         return service.getAllEmployees();
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "id")
-    public Employee get(@RequestParam int id) {
-        Optional<Employee> employee = service.getEmployee(id);
-        if (employee.isPresent()) {
-            return employee.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee with id " + id);
-        }
+    @GetMapping(params = "id")
+    public ResponseEntity<Employee> get(@RequestParam int id) {
+        return ResponseEntity.of(service.getEmployee(id));
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public Employee createEmployee(@RequestBody Employee employee) {
         return service.saveEmployee(employee);
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     public Employee updateEmployee(@RequestBody Employee employee) {
         return service.saveEmployee(employee);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
-    public Employee deleteEmployee(@RequestParam int id) {
-        Optional<Employee> employee = service.deleteEmployee(id);
-        if (employee.isPresent()) {
-            return employee.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee with id " + id);
-        }
+    @DeleteMapping
+    public ResponseEntity<Employee> deleteEmployee(@RequestParam int id) {
+        return ResponseEntity.of(service.deleteEmployee(id));
     }
 }

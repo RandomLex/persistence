@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -29,14 +30,13 @@ public class EmployeeJsonController {
 
     private final EmployeeService service;
 
+    // GET /zzz/employees?salary>=100
     @GetMapping
-    public List<Employee> getAll() {
-        return service.getAllEmployees();
-    }
-
-    @GetMapping(params = "id")
-    public ResponseEntity<Employee> get(@RequestParam int id) {
-        return ResponseEntity.of(service.getEmployee(id));
+    public List<Employee> getAll(
+            @RequestParam(name = "salary>", required = false, defaultValue = "0") int salaryGreatOrEquals) {
+        return service.getAllEmployees().stream()
+                .filter(employee -> employee.getSalary() >= salaryGreatOrEquals)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")

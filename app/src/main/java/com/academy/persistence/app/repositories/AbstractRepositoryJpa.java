@@ -1,5 +1,6 @@
 package com.academy.persistence.app.repositories;
 
+import com.academy.persistence.app.aspects.JpaTransaction;
 import com.academy.persistence.model.AbstractEntity;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,15 +20,9 @@ public abstract class AbstractRepositoryJpa<T extends AbstractEntity> implements
     protected abstract TypedQuery<T> findOneQuery();
 
     @Override
+    @JpaTransaction
     public List<T> findAll() {
-        List<T> result;
-        EntityManager em = helper.getEntityManager();
-        EntityTransaction trx = em.getTransaction();
-        trx.begin();
-        result = findAllQuery().getResultList();
-        trx.commit();
-        em.close();
-        return result;
+        return findAllQuery().getResultList();
     }
 
     @Override

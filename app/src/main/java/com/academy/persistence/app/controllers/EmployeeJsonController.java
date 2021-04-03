@@ -35,8 +35,7 @@ public class EmployeeJsonController {
     // GET /zzz/employees?salary>=100
     @GetMapping
     public List<Employee> getAll(
-            @RequestParam(name = "salary>", required = false, defaultValue = "0") int salaryGreatOrEquals,
-            HttpServletRequest req) {
+            @RequestParam(name = "salary>", required = false, defaultValue = "0") int salaryGreatOrEquals) {
         return service.getAllEmployees().stream()
                 .filter(employee -> employee.getSalary() >= salaryGreatOrEquals)
                 .collect(Collectors.toList());

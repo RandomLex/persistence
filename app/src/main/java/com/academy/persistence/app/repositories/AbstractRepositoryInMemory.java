@@ -1,5 +1,6 @@
 package com.academy.persistence.app.repositories;
 
+import com.academy.persistence.app.exceptions.ApplicationException;
 import com.academy.persistence.model.AbstractEntity;
 
 import java.util.ArrayList;
@@ -40,7 +41,9 @@ public abstract class AbstractRepositoryInMemory<T extends AbstractEntity> imple
     }
 
     public Optional<T> remove(Integer id) {
-
+        if (true) {
+            throw new ApplicationException("Test exception");
+        }
         return Optional.ofNullable(map.remove(id));
     }
 }

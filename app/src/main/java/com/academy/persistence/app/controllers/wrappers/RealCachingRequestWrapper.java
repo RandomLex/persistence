@@ -66,6 +66,10 @@ public class RealCachingRequestWrapper extends HttpServletRequestWrapper {
 
     }
 
+    public void setInputStream(byte[] newData) {
+        data = Arrays.copyOf(newData, newData.length);
+        this.inputStream = new ContentCachingInputStream(new ByteArrayInputStream(data));
+    }
 
     @Override
     public ServletInputStream getInputStream() throws IOException {

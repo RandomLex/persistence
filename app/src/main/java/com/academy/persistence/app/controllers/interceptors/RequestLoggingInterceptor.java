@@ -4,8 +4,10 @@ import com.academy.persistence.app.controllers.wrappers.RealCachingRequestWrappe
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,11 +25,11 @@ public class RequestLoggingInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-    @SneakyThrows
-    private void logBody(HttpServletRequest req) {
-        RealCachingRequestWrapper reqWrapper = (RealCachingRequestWrapper) req;
-        String body = new String(reqWrapper.getContentAsByteArray(), req.getCharacterEncoding());
-        log.info("Request Body: \n {}", body);
+    @Override
+    public void postHandle(HttpServletRequest req, HttpServletResponse resp, Object handler, ModelAndView modelAndView) throws Exception {
+        ContentCachingResponseWrapper responseWrapper = (ContentCachingResponseWrapper) resp;
+        String body = new String(responseWrapper.getContentAsByteArray(), responseWrapper.getCharacterEncoding());
+        log.debug("Response Body: \n {}", body);
     }
 
     private void logRequestUrl(HttpServletRequest req) {
@@ -42,5 +44,12 @@ public class RequestLoggingInterceptor extends HandlerInterceptorAdapter {
         log.debug("Headers");
         Collections.list(headerNames)
                 .forEach(name -> log.debug("[{}]: {}", name, req.getHeader(name)));
+    }
+
+    @SneakyThrows
+    private void logBody(HttpServletRequest req) {
+        RealCachingRequestWrapper reqWrapper = (RealCachingRequestWrapper) req;
+        String body = new String(reqWrapper.getContentAsByteArray(), req.getCharacterEncoding());
+        log.debug("Request Body: \n {}", body);
     }
 }

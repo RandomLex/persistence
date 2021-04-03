@@ -1,6 +1,10 @@
 package com.academy.persistence.app.config;
 
+import com.academy.persistence.app.filters.ContentCachingFilter;
+import com.academy.persistence.app.filters.EncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.Filter;
 
 public class WebApplicationConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
@@ -16,5 +20,13 @@ public class WebApplicationConfig extends AbstractAnnotationConfigDispatcherServ
     @Override
     protected String[] getServletMappings() {
         return new String[] {"/"};
+    }
+
+    @Override
+    protected Filter[] getServletFilters() {
+        return new Filter[] {
+                new EncodingFilter(),
+                new ContentCachingFilter()
+        };
     }
 }

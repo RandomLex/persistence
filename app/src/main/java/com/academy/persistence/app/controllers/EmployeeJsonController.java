@@ -5,6 +5,7 @@ import com.academy.persistence.model.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +35,8 @@ public class EmployeeJsonController {
     // GET /zzz/employees?salary>=100
     @GetMapping
     public List<Employee> getAll(
-            @RequestParam(name = "salary>", required = false, defaultValue = "0") int salaryGreatOrEquals) {
+            @RequestParam(name = "salary>", required = false, defaultValue = "0") int salaryGreatOrEquals,
+            HttpServletRequest req) {
         return service.getAllEmployees().stream()
                 .filter(employee -> employee.getSalary() >= salaryGreatOrEquals)
                 .collect(Collectors.toList());

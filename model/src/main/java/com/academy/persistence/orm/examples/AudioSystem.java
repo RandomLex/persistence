@@ -1,4 +1,4 @@
-package com.academy.persistence.model.examples;
+package com.academy.persistence.orm.examples;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
 
 @Data
 @NoArgsConstructor

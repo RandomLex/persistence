@@ -1,4 +1,4 @@
-package com.academy.persistence.model.examples;
+package com.academy.persistence.orm.examples;
 
 
 public enum Engine {

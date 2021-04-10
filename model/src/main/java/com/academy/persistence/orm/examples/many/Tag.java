@@ -1,37 +1,34 @@
-package com.academy.persistence.model.examples;
-
+package com.academy.persistence.orm.examples.many;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.ManyToMany;
+import java.util.HashSet;
 import java.util.Set;
 
-@EqualsAndHashCode(exclude = "products")
+@EqualsAndHashCode(exclude = "posts")
+@ToString(exclude = "posts")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "product_type")
-public class ProductType {
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String name;
 
-    @OneToMany(mappedBy = "productType", cascade = CascadeType.PERSIST, orphanRemoval = true,
-        fetch = FetchType.LAZY)
-    private Set<Product> products;
+    @ManyToMany(mappedBy = "tags")
+    private Set<Post> posts = new HashSet<>();
 }

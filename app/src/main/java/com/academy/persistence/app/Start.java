@@ -1,23 +1,14 @@
 package com.academy.persistence.app;
 
 import com.academy.persistence.app.repositories.EntityManagerHelper;
-import com.academy.persistence.model.examples.Product;
-import com.academy.persistence.model.examples.ProductType;
+import com.academy.persistence.orm.examples.Product;
+import com.academy.persistence.orm.examples.ProductType;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CompoundSelection;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
-import javax.persistence.criteria.Root;
-import java.util.Arrays;
-import java.util.List;
 
 public class Start {
     public static void main(String[] args) {

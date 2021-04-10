@@ -1,4 +1,4 @@
-package com.academy.persistence.model.examples.many;
+package com.academy.persistence.orm.examples.many;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

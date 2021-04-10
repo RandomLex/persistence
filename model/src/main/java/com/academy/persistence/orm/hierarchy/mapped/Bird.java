@@ -1,4 +1,4 @@
-package com.academy.persistence.model.hierarchy.mapped;
+package com.academy.persistence.orm.hierarchy.mapped;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

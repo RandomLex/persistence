@@ -1,4 +1,4 @@
-package com.academy.persistence.model.hierarchy.single;
+package com.academy.persistence.orm.hierarchy.join;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,13 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @SuperBuilder
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "class_name")
 @Entity
 public class Animal {

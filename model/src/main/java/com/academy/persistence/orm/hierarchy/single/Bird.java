@@ -1,5 +1,4 @@
-package com.academy.persistence.model.hierarchy.mapped;
-
+package com.academy.persistence.orm.hierarchy.single;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @ToString(callSuper = true)
@@ -17,7 +17,8 @@ import javax.persistence.Entity;
 @Data
 @SuperBuilder
 @Entity
-public class Fish extends Animal {
-    private String skeleton;
-    private Boolean poison;
+@DiscriminatorValue("bird")
+public class Bird extends Animal {
+    private Boolean flyable;
+    private String growing;
 }

@@ -1,4 +1,5 @@
-package com.academy.persistence.model.hierarchy.table;
+package com.academy.persistence.orm.hierarchy.table;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +17,7 @@ import javax.persistence.Entity;
 @Data
 @SuperBuilder
 @Entity
-public class Bird extends Animal {
-    private Boolean flyable;
-    private String growing;
+public class Fish extends Animal {
+    private String skeleton;
+    private Boolean poison;
 }

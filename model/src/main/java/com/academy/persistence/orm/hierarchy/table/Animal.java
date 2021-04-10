@@ -1,11 +1,10 @@
-package com.academy.persistence.model.hierarchy.table;
+package com.academy.persistence.orm.hierarchy.table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -41,7 +43,21 @@ public class SpringHibernateConfig {
         props.setProperty("hibernate.dbcp.maxIdle", "10");
         props.setProperty("hibernate.dbcp.minIdle", "5");
         props.setProperty("hibernate.dbcp.maxWaitMillis", "-1");
-        props.setProperty("hibernate.enable_lazy_load_no_trans", "true");
+//        props.setProperty("hibernate.enable_lazy_load_no_trans", "true");
         return props;
+    }
+
+    @Bean
+    public JpaTransactionManager jpaTransactionManager() {
+        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
+        jpaTransactionManager.setEntityManagerFactory(factory().getObject());
+        return jpaTransactionManager;
+    }
+
+    @Bean
+    public TransactionTemplate transactionTemplate() {
+        TransactionTemplate transactionTemplate = new TransactionTemplate();
+        transactionTemplate.setTransactionManager(jpaTransactionManager());
+        return transactionTemplate;
     }
 }

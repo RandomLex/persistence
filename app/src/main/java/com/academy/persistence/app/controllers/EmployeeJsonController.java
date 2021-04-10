@@ -5,7 +5,6 @@ import com.academy.persistence.model.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,19 +34,19 @@ public class EmployeeJsonController {
     @GetMapping
     public List<Employee> getAll(
             @RequestParam(name = "salary>", required = false, defaultValue = "0") int salaryGreatOrEquals) {
-        return service.getAllEmployees().stream()
+        return service.getAll().stream()
                 .filter(employee -> employee.getSalary() >= salaryGreatOrEquals)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getByPath(@PathVariable int id) {
-        return ResponseEntity.of(service.getEmployee(id));
+        return ResponseEntity.of(service.get(id));
     }
 
     @PostMapping
     public Employee createEmployee(@RequestBody Employee employee) {
-        return service.saveEmployee(employee);
+        return service.save(employee);
     }
 
     @PutMapping("/{id}")
@@ -57,12 +55,12 @@ public class EmployeeJsonController {
             @PathVariable int id) {
         return employee != null && id != employee.getId()
                 ? createExceptionMessage("Id in path and in entity must be the same")
-                : ResponseEntity.ok(service.saveEmployee(employee));
+                : ResponseEntity.ok(service.save(employee));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Employee> deleteEmployee(@PathVariable int id) {
-        return ResponseEntity.of(service.deleteEmployee(id));
+        return ResponseEntity.of(service.delete(id));
     }
 
     private ResponseEntity<ExceptionMessage> createExceptionMessage(String msg) {

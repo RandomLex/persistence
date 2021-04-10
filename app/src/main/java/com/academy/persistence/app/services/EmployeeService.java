@@ -5,14 +5,12 @@ import com.academy.persistence.model.Employee;
 import java.util.List;
 import java.util.Optional;
 
-public interface EmployeeService {
-    List<Employee> getAllEmployees();
+public interface EmployeeService extends ServiceInterface<Employee>{
+    List<Employee> getAll();
 
-    Optional<Employee> getEmployee(Integer id);
+    Optional<Employee> get(Integer id);
 
-    Employee saveEmployee(String name, int salary);
+    Employee save(Employee employee);
 
-    Employee saveEmployee(Employee employee);
-
-    Optional<Employee> deleteEmployee(Integer id);
+    Optional<Employee> delete(Integer id);
 }

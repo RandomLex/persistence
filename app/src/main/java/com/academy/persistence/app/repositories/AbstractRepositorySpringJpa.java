@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
+import javax.persistence.PersistenceUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,23 +15,25 @@ import java.util.Optional;
 public class AbstractRepositorySpringJpa<T> implements com.academy.persistence.app.repositories.Repository<T> {
 
     protected Class<T> clazz;
-    @PersistenceContext(type = PersistenceContextType.EXTENDED)
-    private EntityManager em;
+    @PersistenceUnit
+    private EntityManagerFactory emf;
+//    @PersistenceContext
+//    private EntityManager em;
 
     @Override
     public List<T> findAll() {
-        List<T> resultList = em.createQuery("from " + clazz.getName(), clazz).getResultList();
+        List<T> resultList = emf.createEntityManager().createQuery("from " + clazz.getName(), clazz).getResultList();
         return resultList;
     }
 
     @Override
     public Optional<T> find(Integer id) {
-        return Optional.of(em.find(clazz, id));
+        return Optional.of(emf.createEntityManager().find(clazz, id));
     }
 
     @Override
     public T save(T entity) {
-        em.persist(entity);
+        emf.createEntityManager().persist(entity);
         return entity;
     }
 
@@ -38,7 +41,7 @@ public class AbstractRepositorySpringJpa<T> implements com.academy.persistence.a
     public Optional<T> remove(Integer id) {
         Optional<T> entity = find(id);
         if (entity.isPresent()) {
-            em.remove(entity);
+            emf.createEntityManager().remove(entity.get());
             return entity;
         }
         return Optional.empty();

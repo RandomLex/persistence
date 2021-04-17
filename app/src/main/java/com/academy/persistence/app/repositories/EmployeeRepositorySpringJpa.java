@@ -30,4 +30,12 @@ public class EmployeeRepositorySpringJpa extends AbstractRepositorySpringJpa<Emp
                                         .build()).collect(Collectors.toList()))
                         .build()).collect(Collectors.toList());
     }
+
+    @Override
+    public List<Employee> findAllFetch() {
+        return em.createQuery("select employee from Employee employee " +
+                "left join fetch employee.departments departments " +
+                "left join fetch departments.city city " +
+                "left join fetch city.departments", clazz).getResultList();
+    }
 }

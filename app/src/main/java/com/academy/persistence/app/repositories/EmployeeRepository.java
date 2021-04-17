@@ -10,4 +10,8 @@ public interface EmployeeRepository extends Repository<Employee> {
     default List<EmployeeDto> findAllDto() {
         throw new ApplicationException("Not implemented");
     }
+
+    default List<Employee> findAllFetch() {
+        throw new ApplicationException("Not implemented");
+    }
 }

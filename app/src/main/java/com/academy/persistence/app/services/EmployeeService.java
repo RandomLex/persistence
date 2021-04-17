@@ -11,6 +11,8 @@ public interface EmployeeService extends ServiceInterface<Employee>{
 
     List<EmployeeDto> getAllDto();
 
+    List<Employee> getAllFetch();
+
     Optional<Employee> get(Integer id);
 
     Employee save(Employee employee);

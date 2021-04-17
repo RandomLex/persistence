@@ -44,4 +44,18 @@ public class EmployeeServiceImpl extends AbstractService<Employee> implements Em
             return new ArrayList<>();
         });
     }
+
+    @Override
+    public List<Employee> getAllFetch() {
+        return transactionTemplate.execute(status -> {
+            try {
+                return ((EmployeeRepository)repository).findAllFetch();
+            } catch (Exception e) {
+                status.setRollbackOnly();
+            }
+            return new ArrayList<>();
+        });
+    }
+
+
 }

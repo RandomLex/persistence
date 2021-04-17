@@ -21,7 +21,7 @@ import java.util.Set;
 public class City extends AbstractEntity {
     private String name;
 
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
     private Set<Department> departments = new HashSet<>();
 
     public City withId(Integer id) {

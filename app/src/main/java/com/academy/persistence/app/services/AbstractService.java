@@ -23,7 +23,14 @@ public class AbstractService<T> implements ServiceInterface<T> {
 
     @Override
     public List<T> getAll() {
-        return repository.findAll();
+        return transactionTemplate.execute(transactionalStatus -> {
+            try {
+                return repository.findAll();
+            } catch (Exception e) {
+                transactionalStatus.setRollbackOnly();
+            }
+            return null;
+        });
     }
 
     @Override

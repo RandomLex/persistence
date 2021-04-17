@@ -24,7 +24,7 @@ import java.util.Set;
 @Entity
 public class Employee extends AbstractEntity {
     private String name;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "department_employee",
             joinColumns = @JoinColumn(name = "employee_id"),

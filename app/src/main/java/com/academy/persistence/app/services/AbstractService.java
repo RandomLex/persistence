@@ -14,7 +14,7 @@ public class AbstractService<T> implements ServiceInterface<T> {
     protected Repository<T> repository;
 
 
-    private TransactionTemplate transactionTemplate;
+    protected TransactionTemplate transactionTemplate;
 
     @Autowired
     public void setTransactionTemplate(TransactionTemplate transactionTemplate) {

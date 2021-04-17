@@ -22,7 +22,7 @@ public class ControllerInterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addWebRequestInterceptor(openSessionInViewInterceptor());
+//        registry.addWebRequestInterceptor(openSessionInViewInterceptor());
         registry.addInterceptor(requestLoggingInterceptor);
     }
 

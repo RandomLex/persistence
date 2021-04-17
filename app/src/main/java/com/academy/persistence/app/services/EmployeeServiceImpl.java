@@ -1,5 +1,6 @@
 package com.academy.persistence.app.services;
 
+import com.academy.persistence.app.dtos.EmployeeDto;
 import com.academy.persistence.app.repositories.EmployeeRepository;
 import com.academy.persistence.app.repositories.RepositoryFactory;
 import com.academy.persistence.model.Employee;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,4 +33,15 @@ public class EmployeeServiceImpl extends AbstractService<Employee> implements Em
         repository = repositoryMap.get(repositoryType);
     }
 
+    @Override
+    public List<EmployeeDto> getAllDto() {
+        return transactionTemplate.execute(status -> {
+            try {
+                return ((EmployeeRepository)repository).findAllDto();
+            } catch (Exception e) {
+                status.setRollbackOnly();
+            }
+            return new ArrayList<>();
+        });
+    }
 }

@@ -1,5 +1,6 @@
 package com.academy.persistence.app.controllers;
 
+import com.academy.persistence.app.dtos.EmployeeDto;
 import com.academy.persistence.app.services.EmployeeService;
 import com.academy.persistence.model.Employee;
 import lombok.AllArgsConstructor;
@@ -32,9 +33,9 @@ public class EmployeeJsonController {
 
     // GET /zzz/employees?salary>=100
     @GetMapping
-    public List<Employee> getAll(
+    public List<EmployeeDto> getAll(
             @RequestParam(name = "salary>", required = false, defaultValue = "0") int salaryGreatOrEquals) {
-        return service.getAll().stream()
+        return service.getAllDto().stream()
                 .filter(employee -> employee.getSalary() >= salaryGreatOrEquals)
                 .collect(Collectors.toList());
     }

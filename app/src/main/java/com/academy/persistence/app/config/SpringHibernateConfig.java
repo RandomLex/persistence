@@ -54,10 +54,4 @@ public class SpringHibernateConfig {
         return jpaTransactionManager;
     }
 
-    @Bean
-    public TransactionTemplate transactionTemplate() {
-        TransactionTemplate transactionTemplate = new TransactionTemplate();
-        transactionTemplate.setTransactionManager(jpaTransactionManager());
-        return transactionTemplate;
-    }
 }

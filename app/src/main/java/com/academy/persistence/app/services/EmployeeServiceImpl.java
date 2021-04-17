@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import java.util.Optional;
 @PropertySource("classpath:app.properties")
 public class EmployeeServiceImpl extends AbstractService<Employee> implements EmployeeService {
 
-//    private EmployeeRepository repository;
+    //    private EmployeeRepository repository;
     @Autowired
     private Map<String, EmployeeRepository> repositoryMap;
     @Value("${repository.type}")
@@ -35,26 +37,13 @@ public class EmployeeServiceImpl extends AbstractService<Employee> implements Em
 
     @Override
     public List<EmployeeDto> getAllDto() {
-        return transactionTemplate.execute(status -> {
-            try {
-                return ((EmployeeRepository)repository).findAllDto();
-            } catch (Exception e) {
-                status.setRollbackOnly();
-            }
-            return new ArrayList<>();
-        });
+        return ((EmployeeRepository) repository).findAllDto();
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     @Override
     public List<Employee> getAllFetch() {
-        return transactionTemplate.execute(status -> {
-            try {
-                return ((EmployeeRepository)repository).findAllFetch();
-            } catch (Exception e) {
-                status.setRollbackOnly();
-            }
-            return new ArrayList<>();
-        });
+        return ((EmployeeRepository) repository).findAllFetch();
     }
 
 

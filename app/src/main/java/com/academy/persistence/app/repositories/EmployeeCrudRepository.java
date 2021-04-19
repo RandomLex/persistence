@@ -19,6 +19,14 @@ public interface EmployeeCrudRepository extends CrudRepository<Employee, Integer
     @Override
     List<Employee> findAll();
 
+    List<Employee> findAllBySalaryGreaterThanEqual(int salary);
+
+    List<Employee> findAllByName(String name);
+
+    @Query("select employee from Employee employee join employee.departments departments " +
+            "where departments.name = :departmentName")
+    List<Employee> findAllByDepartment(@Param("departmentName") String department);
+
     @Query(FETCH_ALL)
     List<Employee> findAllFetch();
 

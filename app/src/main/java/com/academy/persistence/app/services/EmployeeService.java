@@ -13,6 +13,13 @@ public interface EmployeeService extends ServiceInterface<Employee>{
 
     List<Employee> getAllFetch();
 
+    List<Employee> findAllBySalary(int salary);
+
+    List<Employee> findAllByName(String name);
+
+    List<Employee> findAllByDepartment(String department);
+
+
     Optional<Employee> get(Integer id);
 
     Employee save(Employee employee);

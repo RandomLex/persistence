@@ -35,10 +35,23 @@ public class EmployeeJsonController {
     @GetMapping
     public List<Employee> getAll(
             @RequestParam(name = "salary>", required = false, defaultValue = "0") int salaryGreatOrEquals) {
-        return service.getAll().stream()
-                .filter(employee -> employee.getSalary() >= salaryGreatOrEquals)
-                .collect(Collectors.toList());
+        return salaryGreatOrEquals == 0
+                ? service.getAll()
+                : service.findAllBySalary(salaryGreatOrEquals);
     }
+
+    @GetMapping(params = "name")
+    public List<Employee> getAllByName(
+            @RequestParam(name = "name") String name) {
+        return service.findAllByName(name);
+    }
+
+    @GetMapping(params = "department")
+    public List<Employee> getAllByDepartment(
+            @RequestParam(name = "department") String department) {
+        return service.findAllByDepartment(department);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getByPath(@PathVariable int id) {

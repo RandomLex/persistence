@@ -7,6 +7,8 @@ import com.academy.persistence.model.Employee;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,5 +49,17 @@ public class EmployeeServiceImpl extends AbstractService<Employee> implements Em
     @Override
     public List<Employee> getAll() {
         return repository.findAllFetch();
+    }
+
+    public List<Employee> findAllBySalary(int salary) {
+        return repository.findAllBySalaryGreaterThanEqual(salary);
+    }
+
+    public List<Employee> findAllByName(String name) {
+        return repository.findAllByName(name);
+    }
+
+    public List<Employee> findAllByDepartment(String department) {
+        return repository.findAllByDepartment(department);
     }
 }

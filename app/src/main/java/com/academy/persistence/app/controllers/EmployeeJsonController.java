@@ -1,11 +1,13 @@
 package com.academy.persistence.app.controllers;
 
 import com.academy.persistence.app.dtos.EmployeeDto;
+import com.academy.persistence.app.dtos.PageEntityDto;
 import com.academy.persistence.app.services.EmployeeService;
 import com.academy.persistence.model.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,13 @@ public class EmployeeJsonController {
         return salaryGreatOrEquals == 0
                 ? service.getAll()
                 : service.findAllBySalary(salaryGreatOrEquals);
+    }
+
+    @GetMapping(params = {"page", "items"})
+    public PageEntityDto<Employee> getAll(
+            @RequestParam(name = "page") int page,
+            @RequestParam(name = "items") int items) {
+        return service.getAll(PageRequest.of(page, items));
     }
 
     @GetMapping(params = "name")

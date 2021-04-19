@@ -1,12 +1,15 @@
 package com.academy.persistence.app.services;
 
 import com.academy.persistence.app.dtos.EmployeeDto;
+import com.academy.persistence.app.dtos.PageEntityDto;
 import com.academy.persistence.app.repositories.EmployeeCrudRepository;
 import com.academy.persistence.app.repositories.EmployeeRepository;
 import com.academy.persistence.model.Employee;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
@@ -61,5 +64,16 @@ public class EmployeeServiceImpl extends AbstractService<Employee> implements Em
 
     public List<Employee> findAllByDepartment(String department) {
         return repository.findAllByDepartment(department);
+    }
+
+
+    public PageEntityDto<Employee> getAll(Pageable pageable) {
+        Page<Employee> employeePage = repository.findAll(pageable);
+        return new PageEntityDto<>(
+                employeePage.getTotalPages(),
+                employeePage.getTotalElements(),
+                employeePage.getNumber(),
+                employeePage.getNumberOfElements(),
+                employeePage.getContent());
     }
 }

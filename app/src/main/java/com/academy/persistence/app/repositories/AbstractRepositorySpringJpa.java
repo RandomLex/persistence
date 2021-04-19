@@ -22,8 +22,7 @@ public class AbstractRepositorySpringJpa<T> implements com.academy.persistence.a
 
     @Override
     public List<T> findAll() {
-        List<T> resultList = em.createQuery("from " + clazz.getName(), clazz).getResultList();
-        return resultList;
+        return em.createQuery("from " + clazz.getName(), clazz).getResultList();
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.orm.hibernate5.support.OpenSessionInViewInterceptor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,6 +24,7 @@ public class ControllerInterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 //        registry.addWebRequestInterceptor(openSessionInViewInterceptor());
+        registry.addWebRequestInterceptor(openEntityManagerInViewInterceptor());
         registry.addInterceptor(requestLoggingInterceptor);
     }
 
@@ -32,5 +34,12 @@ public class ControllerInterceptorConfig implements WebMvcConfigurer {
         SessionFactory sessionFactory = Objects.requireNonNull(entityManagerFactoryBean.getObject()).unwrap(SessionFactory.class);
         openSessionInViewInterceptor.setSessionFactory(sessionFactory);
         return openSessionInViewInterceptor;
+    }
+
+    @Bean
+    public OpenEntityManagerInViewInterceptor openEntityManagerInViewInterceptor() {
+        OpenEntityManagerInViewInterceptor openEntityManagerInViewInterceptor = new OpenEntityManagerInViewInterceptor();
+        openEntityManagerInViewInterceptor.setEntityManagerFactory(entityManagerFactoryBean.getObject());
+        return openEntityManagerInViewInterceptor;
     }
 }

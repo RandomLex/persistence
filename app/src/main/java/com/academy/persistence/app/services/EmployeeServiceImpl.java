@@ -43,7 +43,7 @@ public class EmployeeServiceImpl extends AbstractService<Employee> implements Em
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     @Override
     public List<Employee> getAllFetch() {
-        return ((EmployeeRepository) repository).findAllFetch();
+        return repository.findAll();
     }
 
 

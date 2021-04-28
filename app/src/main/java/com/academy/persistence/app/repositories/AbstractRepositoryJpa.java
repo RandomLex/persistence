@@ -3,6 +3,8 @@ package com.academy.persistence.app.repositories;
 import com.academy.persistence.app.aspects.JpaTransaction;
 import com.academy.persistence.model.AbstractEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -11,13 +13,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@Component
 public abstract class AbstractRepositoryJpa<T extends AbstractEntity> implements Repository<T> {
     private static final String ID = "id";
-    protected final EntityManagerHelper helper = EntityManagerHelper.getInstance();
+    protected EntityManagerHelper helper;
 
     protected abstract TypedQuery<T> findAllQuery();
 
     protected abstract TypedQuery<T> findOneQuery();
+
+    @Autowired
+    public void setHelper(EntityManagerHelper helper) {
+        this.helper = helper;
+    }
 
     @Override
     @JpaTransaction
@@ -40,17 +48,14 @@ public abstract class AbstractRepositoryJpa<T extends AbstractEntity> implements
     }
 
     @Override
+    @JpaTransaction
     public T save(T entity) {
         EntityManager em = helper.getEntityManager();
-        EntityTransaction trx = em.getTransaction();
-        trx.begin();
         if (entity.getId() == null) {
             em.persist(entity);
         } else {
             em.merge(entity);
         }
-        trx.commit();
-        em.close();
         return entity;
     }
 

@@ -25,7 +25,7 @@ public class Start {
         SessionFactory sessionFactory = cfg.buildSessionFactory();
         Session session = sessionFactory.getCurrentSession();
 
-        EntityManagerHelper helper = EntityManagerHelper.getInstance();
+        EntityManagerHelper helper = new EntityManagerHelper();
 
         EntityManager em = helper.getEntityManager();
         EntityTransaction trx = em.getTransaction();

@@ -1,13 +1,20 @@
 package com.academy.persistence.app.repositories;
 
 import com.academy.persistence.model.examples.ProductType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 
+@Component
 public class ProductTypeRepository {
-    EntityManagerHelper helper = EntityManagerHelper.getInstance();
 
+    EntityManagerHelper helper;
 
+    @Autowired
+    public void setHelper(EntityManagerHelper helper) {
+        this.helper = helper;
+    }
 
     public ProductType find(long id) {
         ProductType result = null;
